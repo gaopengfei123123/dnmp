@@ -1,31 +1,29 @@
-version: "2.1"
+version: "3"
 
 services:
-  www:
+  workspace:
     image: tianon/true
-    container_name: lnmp-www
+    container_name: dnmp-www
     volumes:
-      - ./www:/usr/share/html
+      - ./www:/usr/share/nginx/html
 
   nginx:
     build: ./nginx
     container_name: lnmp-nginx
     ports:
-      - "80:80"
-      - "443:443"
-    volumes_from:
-      - www
-    # networks: 
-    #   web_server_network:
-    #     ipv4_address: $(NGINX_WEB_SERVER_IP)
+      - "8088:80"
+      - "4433:443"
+    links: 
+      - php-fpm:php-fpm
+    volumes:
+      - ./www:/usr/share/nginx/html
     env_file:
       - .env
+  
+  php-fpm:
+    build: ./php-fpm
+    container_name: dnmp-php-fpm
 
-# networks:
-#   web_server_network:
-#     driver: bridge
-#     ipam:
-#       driver: default
-#       config:
-#         subnet: "${WEB_SERVER_SUBNET}"
-#         gateway: "${WEB_SERVER_GATEWAY}"
+volumes:
+  local_data:
+    driver: local
