@@ -1,7 +1,8 @@
-FROM php:7.0-cli
-COPY ${WORSPACE} /usr/src/myapp
+ARG PHP_VERSION=${PHP_VERSION}
 
-WORKDIR /usr/src/myapp
+# src: https://github.com/laradock/php-fpm
+FROM laradock/php-fpm:2.0-${PHP_VERSION}
 
-CMD [ "ls","-l" ]
-# CMD [ "php","index.php" ]
+USER root
+WORKDIR /var/www
+CMD [ "php-fpm" ]

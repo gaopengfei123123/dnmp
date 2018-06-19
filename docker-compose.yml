@@ -16,13 +16,19 @@ services:
     links: 
       - php-fpm:php-fpm
     volumes:
-      - ./www:/usr/share/nginx/html
+      - ${APP_CODE_PATH_HOST}:/usr/share/nginx/html
     env_file:
       - .env
   
   php-fpm:
-    build: ./php-fpm
+    # 这里的args 是属于 build 下面的,用于构建./php-fpm/Dockerfile 文件中 ARG 参数指定 php 版本
+    build: 
+      context: ./php-fpm
+      args:
+        - PHP_VERSION=${PHP_VERSION}
     container_name: dnmp-php-fpm
+    volumes:
+      - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
 
 volumes:
   local_data:
