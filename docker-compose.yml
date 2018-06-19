@@ -2,11 +2,11 @@
 version: "3"
 
 # 网络配置
-networks:
-  frontend:
-    driver: ${NETWORKS_DRIVER}
-  backend:
-    driver: ${NETWORKS_DRIVER}
+# networks:
+#   frontend:
+#     driver: ${NETWORKS_DRIVER}
+#   backend:
+#     driver: ${NETWORKS_DRIVER}
 
 # 服务编排
 services:
