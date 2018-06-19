@@ -29,6 +29,7 @@ services:
     container_name: dnmp-php-fpm
     volumes:
       - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+      - ./php-fpm/php${PHP_VERSION}.ini:/usr/local/etc/php/php.ini
 
 volumes:
   local_data:
