@@ -10,8 +10,16 @@ services:
   #     - ./www:/usr/share/nginx/html
 
   nginx:
-    build: ./nginx
+    build: 
+      context: ./nginx
+      args:
+          - PHP_UPSTREAM_CONTAINER=${NGINX_PHP_UPSTREAM_CONTAINER}
+          - PHP_UPSTREAM_PORT=${NGINX_PHP_UPSTREAM_PORT}
     container_name: lnmp-nginx
+    depends_on:
+      - php-fpm
+    links:
+      - php-fpm
     ports:
       - "8088:80"
       - "4433:443"
@@ -29,6 +37,7 @@ services:
     volumes:
       - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
       - ./php-fpm/php${PHP_VERSION}.ini:/usr/local/etc/php/php.ini
+      - ./www:/usr/share/nginx/html
     expose:
       - "9000"
 
