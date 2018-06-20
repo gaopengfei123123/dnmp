@@ -1,46 +1,26 @@
 # 语法版本( 3 和 2 区别有点大, 比如 3 取消了 volume_from 的相关语法)
 version: "3"
 
-
-# 网络配置
-# networks:
-#   frontend:
-#     driver: ${NETWORKS_DRIVER}
-#   backend:
-#     driver: ${NETWORKS_DRIVER}
-
 # 服务编排
 services:
-  workspace:
-    image: tianon/true
-    container_name: dnmp-www
+  # workspace:
+  #   image: tianon/true
+  #   container_name: dnmp-www
+  #   volumes:
+  #     - ./www:/usr/share/nginx/html
+
+  nginx:
+    build: ./nginx
+    container_name: lnmp-nginx
+    ports:
+      - "8088:80"
+      - "4433:443"
     volumes:
       - ./www:/usr/share/nginx/html
 
-  nginx:
-    container_name: lnmp-nginx
-    build: 
-      context: ./nginx
-      args:
-        - PHP_UPSTREAM_CONTAINER=${NGINX_PHP_UPSTREAM_CONTAINER}
-        - PHP_UPSTREAM_PORT=${NGINX_PHP_UPSTREAM_PORT}
-    ports:
-      - "${NGINX_HOST_HTTP_PORT}:80"
-      - "${NGINX_HOST_HTTPS_PORT}:443"
-    depends_on:
-      - php-fpm
-    volumes:
-      - ${APP_CODE_PATH_HOST}:/usr/share/nginx/html
-    links:
-      - php-fpm:php-fpm
-      # - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
-      # - ${NGINX_HOST_LOG_PATH}:/var/log/nginx
-    # networks:
-    #   - frontend
-    #   - backend
-  
+
   php-fpm:
-    container_name: dnmp-php-fpm
+    # container_name: dnmp-php-fpm
     # 这里的args 是属于 build 下面的,用于构建./php-fpm/Dockerfile 文件中 ARG 参数指定 php 版本
     build: 
       context: ./php-fpm
@@ -49,10 +29,9 @@ services:
     volumes:
       - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
       - ./php-fpm/php${PHP_VERSION}.ini:/usr/local/etc/php/php.ini
-    # networks:
-    #   - frontend
-    #   - backend
+    expose:
+      - "9000"
 
-volumes:
-  local_data:
-    driver: local
+# volumes:
+#   local_data:
+#     driver: local
