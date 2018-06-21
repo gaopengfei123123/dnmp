@@ -1,6 +1,11 @@
 # 语法版本( 3 和 2 区别有点大, 比如 3 取消了 volume_from 的相关语法)
 version: "3"
 
+networks:
+  frontend:
+    driver: ${NETWORKS_DRIVER}
+  backend:
+    driver: ${NETWORKS_DRIVER}
 # 服务编排
 services:
   # workspace:
@@ -18,29 +23,35 @@ services:
     container_name: lnmp-nginx
     depends_on:
       - php-fpm
-    links:
-      - php-fpm
     ports:
-      - "8088:80"
-      - "4433:443"
+      - "${NGINX_HOST_HTTP_PORT}:80"
+      - "${NGINX_HOST_HTTPS_PORT}:443"
     volumes:
-      - ./www:/var/www
-      - ./logs/nginx:/var/log/nginx
+      - ${APP_CODE_PATH_HOST}:/var/www
+      - ${NGINX_HOST_LOG_PATH}:/var/log/nginx
+    # 使用 networks 取代 links 在同一个网络模式下的服务是互通的
+    # 在service 中使用其他的 service 就直接调用 service 名就行, 不用管 ip 地址, docker 会自己维护一套
+    networks:
+      - frontend
+      - backend
+    # links:
+      # - php-fpm
 
 
   php-fpm:
-    # container_name: dnmp-php-fpm
+    container_name: dnmp-php-fpm
     # 这里的args 是属于 build 下面的,用于构建./php-fpm/Dockerfile 文件中 ARG 参数指定 php 版本
     build: 
       context: ./php-fpm
       args:
         - PHP_VERSION=${PHP_VERSION}
     volumes:
-      - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+      - ${APP_CODE_PATH_HOST}:/var/www
       - ./php-fpm/php${PHP_VERSION}.ini:/usr/local/etc/php/php.ini
-      - ./www:/usr/share/nginx/html
     expose:
       - "9000"
+    networks:
+      - backend
 
 # volumes:
 #   local_data:
