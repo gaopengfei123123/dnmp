@@ -24,7 +24,8 @@ services:
       - "8088:80"
       - "4433:443"
     volumes:
-      - ./www:/usr/share/nginx/html
+      - ./www:/var/www
+      - ./logs/nginx:/var/log/nginx
 
 
   php-fpm:
