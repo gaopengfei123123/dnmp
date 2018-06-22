@@ -52,7 +52,16 @@ services:
       - "9000"
     networks:
       - backend
-
+    
+  redis:
+    container_name: dnmp-redis
+    build:
+      context: ./redis
+    ports:
+      - ${REDIS_HOST_PORT}:6379
+    volumes:
+      - ${DATA_PATH_HOST}/redis:/data
+      
 # volumes:
 #   local_data:
 #     driver: local
