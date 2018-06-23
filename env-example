@@ -1,0 +1,40 @@
+NGINX_WEB_SERVER_IP=172.16.41.20
+WEB_SERVER_SUBNET=172.16.41.0/16
+WEB_SERVER_GATEWAY=172.16.41.1
+
+# 本地代码地址
+APP_CODE_PATH_HOST=./www/
+# 容器代码地址
+APP_CODE_PATH_CONTAINER=/var/www
+# 挂载卷驱动
+VOLUMES_DRIVER=local
+DATA_PATH_HOST=~/.dnmp/data
+# 网络驱动
+NETWORKS_DRIVER=bridge
+# php 版本(目前只有70)
+PHP_VERSION=70
+
+
+
+
+# nginx 配置
+# 这俩端口是本地端口
+NGINX_HOST_HTTP_PORT=8089
+NGINX_HOST_HTTPS_PORT=4433
+NGINX_HOST_LOG_PATH=./logs/nginx/
+NGINX_SITES_PATH=./nginx/sites/
+NGINX_PHP_UPSTREAM_CONTAINER=php-fpm
+NGINX_PHP_UPSTREAM_PORT=9000
+
+# redis 配置
+REDIS_HOST_PORT=63790
+REDIS_SET_PASSWORD=abcdes
+
+# mysql 配置
+# 可选版本参考: https://hub.docker.com/_/mysql/
+MYSQL_VERSION=5.7
+MYSQL_HOST_PORT=33060
+MYSQL_ROOT_PASSWORD=gaofeifiy
+MYSQL_DATABASE=develop
+MYSQL_USER=developer
+MYSQL_PASSWORD=developer
