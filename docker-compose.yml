@@ -89,7 +89,3 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - ${MYSQL_HOST_PORT}:3306
-      
-# volumes:
-#   local_data:
-#     driver: local
