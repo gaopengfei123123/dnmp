@@ -64,6 +64,8 @@ services:
     container_name: dnmp-redis
     build:
       context: ./redis
+      args:
+        - REDIS_SET_PASSWORD=${REDIS_SET_PASSWORD}
     ports:
       - ${REDIS_HOST_PORT}:6379
     volumes:
@@ -73,6 +75,7 @@ services:
       - redis_volume:/data
 
   mysql:
+    container_name: dnmp-mysql
     # 镜像来源: https://github.com/docker-library/mysql/blob/fc3e856313423dc2d6a8d74cfd6b678582090fc7/5.7/Dockerfile
     image: mysql:${MYSQL_VERSION}
     volumes:
