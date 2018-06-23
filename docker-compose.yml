@@ -6,6 +6,13 @@ networks:
     driver: ${NETWORKS_DRIVER}
   backend:
     driver: ${NETWORKS_DRIVER}
+
+
+volumes:
+  mysql_volume:
+    driver: ${VOLUMES_DRIVER}
+  redis_volume:
+    driver: ${VOLUMES_DRIVER}
 # 服务编排
 services:
   # workspace:
@@ -15,12 +22,12 @@ services:
   #     - ./www:/usr/share/nginx/html
 
   nginx:
+    container_name: dnmp-nginx
     build: 
       context: ./nginx
       args:
           - PHP_UPSTREAM_CONTAINER=${NGINX_PHP_UPSTREAM_CONTAINER}
           - PHP_UPSTREAM_PORT=${NGINX_PHP_UPSTREAM_PORT}
-    container_name: lnmp-nginx
     depends_on:
       - php-fpm
     ports:
@@ -60,7 +67,25 @@ services:
     ports:
       - ${REDIS_HOST_PORT}:6379
     volumes:
-      - ${DATA_PATH_HOST}/redis:/data
+      # 这里卷挂载的是本地文件
+      # - ${DATA_PATH_HOST}/redis:/data
+      # 这里创建一个 redis_volume来存放数据
+      - redis_volume:/data
+
+  mysql:
+    # 镜像来源: https://github.com/docker-library/mysql/blob/fc3e856313423dc2d6a8d74cfd6b678582090fc7/5.7/Dockerfile
+    image: mysql:${MYSQL_VERSION}
+    volumes:
+      # - ${DATA_PATH_HOST}/mysql:/var/lib/mysql
+      - mysql_volume:/var/lib/mysql
+    restart: always
+    environment: 
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - ${MYSQL_HOST_PORT}:3306
       
 # volumes:
 #   local_data:
