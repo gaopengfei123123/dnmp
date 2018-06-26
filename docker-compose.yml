@@ -13,6 +13,8 @@ volumes:
     driver: ${VOLUMES_DRIVER}
   redis_volume:
     driver: ${VOLUMES_DRIVER}
+  rabbitmq_volume:
+    driver: ${VOLUMES_DRIVER}
 # 服务编排
 services:
   # workspace:
@@ -105,6 +107,8 @@ services:
     environment:
       - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
       - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+    volumes:
+      - rabbitmq_volume:/var/lib/rabbitmq/mnesia
     depends_on:
       - php-fpm
     networks:

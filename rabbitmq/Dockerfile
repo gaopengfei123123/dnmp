@@ -3,7 +3,7 @@ FROM rabbitmq
 LABEL maintainer="GPF <5173180@qq.com>"
 
 RUN rabbitmq-plugins enable --offline rabbitmq_management
-
+VOLUME [ "/var/lib/rabbitmq/mnesia" ]
 # rabbitmq_1  |  node           : rabbit@68df1e21dea9
 # rabbitmq_1  |  home dir       : /var/lib/rabbitmq
 # rabbitmq_1  |  config file(s) : /etc/rabbitmq/rabbitmq.conf
