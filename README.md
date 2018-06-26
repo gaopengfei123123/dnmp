@@ -3,6 +3,7 @@
 身为爱国人士就要有自觉配置国内镜像的觉悟, 推荐[阿里云镜像仓库](https://yq.aliyun.com/articles/29941)
 
 
+
 ### 快速开始
 ```bash
 git clone https://github.com/gayhuber/dnmp.git
