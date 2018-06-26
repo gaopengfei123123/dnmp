@@ -1,6 +1,6 @@
 FROM redis:3.2-alpine
 
-LABEL AUTHOR="GPF <5173180@qq.com>" 
+LABEL maintainer="GPF <5173180@qq.com>"
 
 ARG REDIS_SET_PASSWORD=developer
 ENV REDIS_PASSWORD ${REDIS_SET_PASSWORD}

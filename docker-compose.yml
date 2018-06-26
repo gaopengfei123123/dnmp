@@ -21,6 +21,7 @@ services:
   #   volumes:
   #     - ./www:/usr/share/nginx/html
 
+# NGINX #############################################
   nginx:
     container_name: dnmp-nginx
     build: 
@@ -45,6 +46,7 @@ services:
       # - php-fpm
 
 
+# PHP-FPM #############################################
   php-fpm:
     container_name: dnmp-php-fpm
     # 这里的args 是属于 build 下面的,用于构建./php-fpm/Dockerfile 文件中 ARG 参数指定 php 版本
@@ -74,6 +76,7 @@ services:
       # 这里创建一个 redis_volume来存放数据
       - redis_volume:/data
 
+# Mysql #############################################
   mysql:
     container_name: dnmp-mysql
     # 镜像来源: https://github.com/docker-library/mysql/blob/fc3e856313423dc2d6a8d74cfd6b678582090fc7/5.7/Dockerfile
@@ -89,3 +92,20 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - ${MYSQL_HOST_PORT}:3306
+
+ # RabbitMQ #############################################
+  rabbitmq:
+    container_name: dnmp-rabbitmq
+    build: ./rabbitmq
+    ports:
+      - "${RABBITMQ_NODE_HOST_PORT}:5672"
+      - "${RABBITMQ_MANAGEMENT_HTTP_HOST_PORT}:15672"
+      - "${RABBITMQ_MANAGEMENT_HTTPS_HOST_PORT}:15671"
+    privileged: true
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+    depends_on:
+      - php-fpm
+    networks:
+      - backend
