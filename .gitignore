@@ -7,3 +7,9 @@ www/*
 !www/index.php
 .*/
 .*
+
+# nginx 相关的配置文件
+nginx/conf.d/*
+!nginx/conf.d/default.conf
+nginx/cert/*
+nginx/sites/*

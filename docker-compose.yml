@@ -37,15 +37,17 @@ services:
       - "${NGINX_HOST_HTTP_PORT}:80"
       - "${NGINX_HOST_HTTPS_PORT}:443"
     volumes:
+      # 没必要把配置文件用卷来挂载, 不然就算配置更新了 nginx 也是要重启的
+
+      # 挂载运行代码目录
       - ${APP_CODE_PATH_HOST}:/var/www
+      # 挂载日志目录
       - ${NGINX_HOST_LOG_PATH}:/var/log/nginx
     # 使用 networks 取代 links 在同一个网络模式下的服务是互通的
     # 在service 中使用其他的 service 就直接调用 service 名就行, 不用管 ip 地址, docker 会自己维护一套
     networks:
       - frontend
       - backend
-    # links:
-      # - php-fpm
 
 
 # PHP-FPM #############################################
@@ -96,20 +98,20 @@ services:
       - ${MYSQL_HOST_PORT}:3306
 
  # RabbitMQ #############################################
-  rabbitmq:
-    container_name: dnmp-rabbitmq
-    build: ./rabbitmq
-    ports:
-      - "${RABBITMQ_NODE_HOST_PORT}:5672"
-      - "${RABBITMQ_MANAGEMENT_HTTP_HOST_PORT}:15672"
-      - "${RABBITMQ_MANAGEMENT_HTTPS_HOST_PORT}:15671"
-    privileged: true
-    environment:
-      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
-      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
-    volumes:
-      - rabbitmq_volume:/var/lib/rabbitmq/mnesia
-    depends_on:
-      - php-fpm
-    networks:
-      - backend
+  # rabbitmq:
+  #   container_name: dnmp-rabbitmq
+  #   build: ./rabbitmq
+  #   ports:
+  #     - "${RABBITMQ_NODE_HOST_PORT}:5672"
+  #     - "${RABBITMQ_MANAGEMENT_HTTP_HOST_PORT}:15672"
+  #     - "${RABBITMQ_MANAGEMENT_HTTPS_HOST_PORT}:15671"
+  #   privileged: true
+  #   environment:
+  #     - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+  #     - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+  #   volumes:
+  #     - rabbitmq_volume:/var/lib/rabbitmq/mnesia
+  #   depends_on:
+  #     - php-fpm
+  #   networks:
+  #     - backend
