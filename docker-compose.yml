@@ -65,6 +65,19 @@ services:
       - "9000"
     networks:
       - backend
+  
+ # PHP-CLI #############################################
+  php-cli:
+    container_name: dnmp-php-cli
+    build:
+      context: ./php-cli
+    volumes:
+      - ${APP_CODE_PATH_HOST}:/var/www
+      - ./php-fpm/php${PHP_VERSION}.ini:/usr/local/etc/php/php.ini 
+    expose:
+      - "9503"
+    networks: 
+      - backend
     
   redis:
     container_name: dnmp-redis
