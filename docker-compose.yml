@@ -17,11 +17,6 @@ volumes:
     driver: ${VOLUMES_DRIVER}
 # 服务编排
 services:
-  # workspace:
-  #   image: tianon/true
-  #   container_name: dnmp-www
-  #   volumes:
-  #     - ./www:/usr/share/nginx/html
 
 # NGINX #############################################
   nginx:
@@ -67,15 +62,28 @@ services:
       - backend
   
  # PHP-CLI #############################################
-  php-cli:
-    container_name: dnmp-php-cli
+  # php-cli:
+  #   container_name: dnmp-php-cli
+  #   build:
+  #     context: ./php-cli
+  #   volumes:
+  #     - ${APP_CODE_PATH_HOST}:/var/www
+  #     - ./php-fpm/php${PHP_VERSION}.ini:/usr/local/etc/php/php.ini 
+  #   expose:
+  #     - "9503"
+  #   networks: 
+  #     - backend
+  
+  # PHP-SUPERVISOR #############################################
+  php-supervisor:
+    container_name: dnmp-php-supervisor
     build:
-      context: ./php-cli
+      context: ./php-supervisor
     volumes:
       - ${APP_CODE_PATH_HOST}:/var/www
-      - ./php-fpm/php${PHP_VERSION}.ini:/usr/local/etc/php/php.ini 
+      - ./php-fpm/ppphp${PHP_VERSION}.ini:/usr/local/etc/php/php.ini 
     expose:
-      - "9503"
+      - "8080"
     networks: 
       - backend
     
