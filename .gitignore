@@ -12,4 +12,3 @@ www/*
 nginx/conf.d/*
 !nginx/conf.d/default.conf
 nginx/cert/*
-nginx/sites/*
