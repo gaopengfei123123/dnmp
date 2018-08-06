@@ -1,0 +1,5 @@
+# 忽略这个文件夹的改动
+*
+!.gitignore
+!index.html
+!index.php

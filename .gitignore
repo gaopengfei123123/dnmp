@@ -1,14 +1,2 @@
 # 移除 log 日志
 logs/*/*
-
-# 移除 www 下的文件
-www/*
-!www/index.html
-!www/index.php
-.*/
-.*
-
-# nginx 相关的配置文件
-nginx/conf.d/*
-!nginx/conf.d/default.conf
-nginx/cert/*
