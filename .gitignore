@@ -1,2 +1,4 @@
 # 移除 log 日志
 logs/*/*
+.DS_Store
+.idea/
